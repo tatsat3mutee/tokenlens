@@ -1,8 +1,8 @@
 {
   "name": "tokenlens",
-  "displayName": "TokenLens — AI Usage & Cost",
-  "description": "100% local token usage, cache analytics, and cost confidence for Claude Code, GitHub Copilot, and Gemini CLI. No cloud, no telemetry — your logs never leave your machine.",
-  "version": "0.7.2",
+  "displayName": "TokenLens - AI Usage & Cost",
+  "description": "Local token usage and cache analytics for Claude Code, GitHub Copilot, and Gemini CLI. No cloud sync, no telemetry, and no outbound requests.",
+  "version": "0.7.3",
   "publisher": "TatsatP",
   "license": "MIT",
   "icon": "media/icon.png",

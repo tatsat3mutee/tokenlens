@@ -1,43 +1,43 @@
-# TokenLens — AI Usage & Cost
+# TokenLens - AI Usage & Cost
 
-> AI usage & cost tracker for Claude Code, GitHub Copilot, and Gemini CLI — 100% local.
+> AI usage and cost tracking for Claude Code, GitHub Copilot, and Gemini CLI - fully local.
 
-A VS Code extension that tracks **token usage for Claude Code, GitHub Copilot, and Gemini CLI** in one place — token-first, with cost shown only when it's trustworthy. Unified dashboard, time-window filtering, token/cache deep dives, cache-break impact, budgets, live updates, and CSV/JSON export.
+A VS Code extension that tracks **token usage for Claude Code, GitHub Copilot, and Gemini CLI** in one place. TokenLens is token-first, with cost shown only when the data is reliable. It includes a unified dashboard, time-window filtering, token/cache deep dives, cache-break impact, budgets, live updates, and CSV/JSON export.
 
-## 🔒 100% local — no cloud, no telemetry
+## 100% local - no cloud, no telemetry
 
-**Your data never leaves your machine.** TokenLens reads the log files your AI tools already write to disk, computes everything **locally**, and stores results in a local SQLite file inside VS Code's own storage. There are **no servers, no accounts, no network calls, and no telemetry** — TokenLens works fully offline. Source logs are opened **read-only** and are never modified.
+**Your data never leaves your machine.** TokenLens reads the log files your AI tools already write to disk, computes everything **locally**, and stores results in a local SQLite file inside VS Code's own storage. There are **no servers, no accounts, no outbound network calls, and no telemetry**. Source logs are opened **read-only** and are never modified.
 
-> Token-first by design. AI tools don't bill the same way — Copilot meters *premium-request credits*, Claude Code is a *flat subscription*, Gemini CLI is often *free-tier*. So this extension leads with **tokens and cache behavior** (always exact) and only shows a dollar figure when it can stand behind it. See [Cost methodology](docs/COST-METHODOLOGY.md).
+> Token-first by design. AI tools do not bill the same way - Copilot meters *premium-request credits*, Claude Code is commonly a *flat subscription*, and Gemini CLI may be *free-tier*. TokenLens prioritizes **tokens and cache behavior** (always exact) and shows USD only when confidence is clear. See [Cost methodology](docs/COST-METHODOLOGY.md).
 
 ---
 
 ## Features
 
 ### Unified dashboard
-- **Per-source cards** — tokens, cost (with confidence), credits, and cache-hit for Claude Code, Copilot, and Gemini CLI side by side.
-- **Time window** — All time / 6h / 12h / 24h / 48h / 72h / 7 days / custom date range; filters every panel.
-- **Source filter** — All / Claude Code / Copilot / Gemini CLI.
-- **Daily chart** — stacked token bars per source + a combined cost line.
+- **Per-source cards** - tokens, cost (with confidence), credits, and cache-hit for Claude Code, Copilot, and Gemini CLI side by side.
+- **Time window** - All time / 6h / 12h / 24h / 48h / 72h / 7 days / custom date range; filters every panel.
+- **Source filter** - All / Claude Code / Copilot / Gemini CLI.
+- **Daily chart** - stacked token bars per source + a combined cost line.
 
 ### Token & cache deep dive
-- **Token breakdown** — fresh input · cached read · cache write · output, as a proportion bar with counts and %.
+- **Token breakdown** - fresh input · cached read · cache write · output, as a proportion bar with counts and %.
 - **Cache efficiency**, **tokens served from cache**, **cache writes**, and **cache breaks** (when a warm prompt cache was lost). See [Tokens & cache](docs/TOKENS-AND-CACHE.md).
-- **By-model table** — per-model token split + color-coded cache-hit; `sub` badge for sub-agent calls; `⚠ no price` for unpriced models.
+- **By-model table** - per-model token split + color-coded cache-hit; `sub` badge for sub-agent calls; `⚠ no price` for unpriced models.
 
 ### Sessions
-- **Latest Session** panel — most recent session's stats + per-model mini-table, auto-refreshing.
-- **All sessions** — sortable columns; **click a row** to expand an inline per-model breakdown. `sub` / `⚠` badges.
+- **Latest Session** panel - most recent session's stats + per-model mini-table, auto-refreshing.
+- **All sessions** - sortable columns; **click a row** to expand an inline per-model breakdown. `sub` / `⚠` badges.
 
-### Cost — only when trustworthy
-- **Copilot** → premium-request **AI credits** (`copilotUsageNanoAiu`, $0.01/credit). `≥` marks a floor when some calls predate the credit field.
-- **Claude Code / Gemini CLI** → **≈ API-equivalent estimate** from bundled price tables (you likely pay a flat subscription — or nothing on Gemini's free tier — so it's labeled `est`; hide it with `tokenLens.showEstimatedCost`).
+### Cost - only when trustworthy
+- **Copilot** -> premium-request **AI credits** (`copilotUsageNanoAiu`, $0.01/credit). `≥` marks a floor when some calls predate the credit field.
+- **Claude Code / Gemini CLI** -> **≈ API-equivalent estimate** from bundled price tables (you likely pay a flat subscription - or nothing on Gemini's free tier - so it is labeled `est`; hide it with `tokenLens.showEstimatedCost`).
 - **`—`** → no reliable cost; tokens are shown instead. Unpriced models are excluded from totals.
 
 ### Budgets, live, export
-- **Budget alerts** — daily/weekly USD thresholds; one VS Code warning per period; status bar shows today's tokens / ≈USD.
-- **Live tracking** — watches all log roots (`fs.watch`) and refreshes within ~2s as you work.
-- **Export** — CSV/JSON of sessions (window- and source-filtered) from the dashboard or the command palette.
+- **Budget alerts** - daily/weekly USD thresholds; one VS Code warning per period; status bar shows today's tokens / ≈USD.
+- **Live tracking** - watches all log roots (`fs.watch`) and refreshes within ~2s as you work.
+- **Export** - CSV/JSON of sessions (window- and source-filtered) from the dashboard or the command palette.
 
 ---
 
@@ -59,7 +59,7 @@ TokenLens is **local-first and offline by design**:
 - **Read-only.** Your AI tool logs are opened read-only; TokenLens never edits or deletes them.
 - **Local storage only.** All computed data stays in a SQLite file inside VS Code's `globalStorage` on your disk. Uninstalling clears it.
 - **No bundled secrets.** Pricing tables ship with the extension; no API keys are used or required.
-- **Open source.** Audit every line — see the [repository](https://github.com/tatsat3mutee/tokenlens).
+- **Open source.** Audit every line - see the [repository](https://github.com/tatsat3mutee/tokenlens).
 
 ## Install / develop
 

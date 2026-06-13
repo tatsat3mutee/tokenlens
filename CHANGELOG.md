@@ -2,6 +2,13 @@
 
 All notable changes. Versions are `0.x` while in active development.
 
+## 0.7.3
+
+### Changed - metadata and content polish
+- Updated Marketplace metadata wording for a cleaner, generic TokenLens description.
+- Standardized README wording to a professional local-first tone.
+- Replaced long-dash punctuation in key user-facing content with plain hyphen style.
+
 ## 0.7.2
 
 ### Fixed — layout & theming
