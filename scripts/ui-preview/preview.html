@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<!-- Dev-only preview harness: renders the real dashboard with mock data in a plain browser.
+     Not shipped in the VSIX (scripts/ is excluded). Open directly via file:// -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="../../src/ui/styles.css" />
+  <title>TokenLens — UI preview</title>
+  <style id="themeVars"></style>
+  <script>
+    // --- theme simulation (toggle with ?theme=light) ---
+    (function () {
+      const dark = !/theme=light/.test(location.search);
+      const v = dark ? {
+        '--vscode-foreground': '#cccccc',
+        '--vscode-editor-background': '#1f1f1f',
+        '--vscode-editorWidget-background': '#252526',
+        '--vscode-widget-border': 'rgba(255,255,255,.09)',
+        '--vscode-descriptionForeground': '#9d9d9d',
+        '--vscode-charts-green': '#7ad17a',
+        '--vscode-charts-red': '#f14c4c',
+        '--vscode-errorForeground': '#f48771',
+        '--vscode-textLink-foreground': '#4daafc',
+        '--vscode-font-family': 'Segoe UI, sans-serif',
+        '--vscode-input-background': '#313131',
+        '--vscode-input-foreground': '#cccccc',
+        '--vscode-button-background': '#0e639c',
+        '--vscode-button-foreground': '#ffffff',
+      } : {
+        '--vscode-foreground': '#3b3b3b',
+        '--vscode-editor-background': '#ffffff',
+        '--vscode-editorWidget-background': '#f8f8f8',
+        '--vscode-widget-border': 'rgba(0,0,0,.12)',
+        '--vscode-descriptionForeground': '#717171',
+        '--vscode-charts-green': '#388a34',
+        '--vscode-charts-red': '#cd3131',
+        '--vscode-errorForeground': '#b01011',
+        '--vscode-textLink-foreground': '#005fb8',
+        '--vscode-font-family': 'Segoe UI, sans-serif',
+        '--vscode-input-background': '#ffffff',
+        '--vscode-input-foreground': '#3b3b3b',
+        '--vscode-button-background': '#005fb8',
+        '--vscode-button-foreground': '#ffffff',
+      };
+      document.getElementById('themeVars').textContent =
+        ':root{' + Object.entries(v).map(([k, val]) => k + ':' + val).join(';') + '}' +
+        'body{background:var(--vscode-editor-background);color:var(--vscode-foreground)}';
+    })();
+
+    // --- VS Code API stub + mock RPC host ---
+    const NOW = Math.floor(Date.now() / 1000);
+    const H = 3600, D = 86400;
+    const sess = (o) => Object.assign({
+      cache_write_tokens: 0, ai_credits: 0, cache_breaks: 0, cache_break_tokens: 0,
+      cache_break_causes_json: '{}', cache_break_token_causes_json: '{}',
+      has_subagent: 0, has_unknown_model: 0, is_estimate: 0, cost_confidence: 'exact',
+      source_path: 'C:/fake/log.jsonl',
+    }, o);
+
+    const SESSIONS = [
+      sess({ session_id: 'cp:37cb5475-cb53-4b85-b70d-45cbec1520a4', source: 'copilot', title: '**See the screenshot here, the catch is we have a #file:sdlc-ant-hub extension whise UI i showed**', workspace: 'c:/Users/TatsatPandey/Downloads/ai-cost-tracker', start_time: NOW - 4 * H, end_time: NOW - 420, input_tokens: 1.4e6, cache_read_tokens: 17.9e6, output_tokens: 9.1e4, total_calls: 175, cost_usd: 30.42, cost_confidence: 'partial', ai_credits: 3042, cache_breaks: 3, cache_break_tokens: 395200, cache_break_causes_json: '{"model_switch":1,"eviction":2}', cache_break_token_causes_json: '{"model_switch":120000,"eviction":275200}' }),
+      sess({ session_id: 'cc:8f1c2d', source: 'claudeCode', title: 'Plan: Full Assessment + Migration + Deployment Strategy for the teleco project', workspace: 'c:/work/mtech-teleco-multiagent-project', start_time: NOW - 26 * H, end_time: NOW - 25 * H, input_tokens: 3.6e6, cache_read_tokens: 20.2e6, cache_write_tokens: 4.1e5, output_tokens: 1.4e5, total_calls: 230, cost_usd: 36.85, cost_confidence: 'estimate', is_estimate: 1, has_subagent: 1, cache_breaks: 18, cache_break_tokens: 1.38e6, cache_break_causes_json: '{"model_switch":18}', cache_break_token_causes_json: '{"model_switch":1380000}' }),
+      sess({ session_id: 'gm:f00d42', source: 'geminiCli', title: 'how to zoom these images and see what ius there', workspace: 'c:/work/stage', start_time: NOW - 30 * H, end_time: NOW - 29 * H, input_tokens: 3.4e4, cache_read_tokens: 9.1e4, output_tokens: 7.7e3, total_calls: 12, cost_usd: 0.18, cost_confidence: 'estimate', is_estimate: 1 }),
+      sess({ session_id: 'cp:aa11bb', source: 'copilot', title: '@gen-docs-hub --service "C:/Users/TatsatPandey/Documents/x"', workspace: 'c:/work/plugins', start_time: NOW - 2 * D, end_time: NOW - 2 * D + H, input_tokens: 7.2e5, cache_read_tokens: 8.4e6, output_tokens: 5.5e4, total_calls: 96, cost_usd: 11.15, ai_credits: 1115 }),
+      sess({ session_id: 'cc:77ee21', source: 'claudeCode', title: 'Migrate this service', workspace: 'c:/work/guide', start_time: NOW - 3 * D, end_time: NOW - 3 * D + 2 * H, input_tokens: 2.3e6, cache_read_tokens: 23.4e6, cache_write_tokens: 2.2e5, output_tokens: 9.9e4, total_calls: 144, cost_usd: 0.49, cost_confidence: 'partial', has_subagent: 1 }),
+      sess({ session_id: 'cp:99ffaa', source: 'copilot', title: 'Handing off from VS Code chat. Original request: > You …', workspace: 'c:/work/agent-sessions', start_time: NOW - 7 * D, end_time: NOW - 7 * D + H, input_tokens: 4.6e5, cache_read_tokens: 3.3e6, output_tokens: 2.4e4, total_calls: 41, cost_usd: 0, cost_confidence: 'none', has_unknown_model: 1 }),
+    ];
+
+    const MODELS = [
+      { source: 'copilot', model: 'claude-sonnet-4.6', calls: 320, fresh: 2.4e6, cached: 26e6, cache_write: 0, output: 1.6e5, cost_usd: 38.2, ai_credits: 3820 },
+      { source: 'copilot', model: 'claude-opus-4.7', calls: 12, fresh: 9.4e5, cached: 4.1e6, cache_write: 0, output: 2.8e4, cost_usd: 0, ai_credits: 0 },
+      { source: 'copilot', model: 'gpt-5.4', calls: 8, fresh: 1.1e5, cached: 6.5e5, cache_write: 0, output: 9.5e3, cost_usd: 0, ai_credits: 0 },
+      { source: 'claudeCode', model: 'claude-sonnet-4-5', calls: 290, fresh: 4.8e6, cached: 38e6, cache_write: 5.6e5, output: 2.1e5, cost_usd: 36.4, is_estimate: 1, has_subagent: 1 },
+      { source: 'claudeCode', model: 'claude-haiku-4-5', calls: 66, fresh: 5.5e5, cached: 4.4e6, cache_write: 8.1e4, output: 3.9e4, cost_usd: 0.9, is_estimate: 1 },
+      { source: 'geminiCli', model: 'gemini-3-flash-preview', calls: 12, fresh: 3.4e4, cached: 9.1e4, cache_write: 0, output: 7.7e3, cost_usd: 0.18, is_estimate: 1 },
+    ];
+
+    const DAILY = [];
+    for (let i = 13; i >= 0; i--) {
+      const day = new Date((NOW - i * D) * 1000).toISOString().slice(0, 10);
+      DAILY.push({ day, source: 'copilot', tokens: 2e6 + Math.round(Math.random() * 3e7), cost_usd: 2 + Math.random() * 12 });
+      DAILY.push({ day, source: 'claudeCode', tokens: 1e6 + Math.round(Math.random() * 4e7), cost_usd: 1 + Math.random() * 9 });
+      if (i % 3 === 0) DAILY.push({ day, source: 'geminiCli', tokens: Math.round(Math.random() * 4e6), cost_usd: Math.random() * 0.4 });
+    }
+
+    const DASH = {
+      totals: [
+        { source: 'claudeCode', input_tokens: 5.3e6, cache_read_tokens: 42e6, cache_write_tokens: 6.4e5, output_tokens: 2.5e5, cost_usd: 37.3, calls: 356, sessions: 22, is_estimate: 1, cost_confidence: 'estimate' },
+        { source: 'copilot', input_tokens: 3.5e6, cache_read_tokens: 31e6, cache_write_tokens: 0, output_tokens: 2e5, cost_usd: 49.3, ai_credits: 4935, calls: 340, sessions: 31, cost_confidence: 'partial' },
+        { source: 'geminiCli', input_tokens: 3.4e4, cache_read_tokens: 9.1e4, cache_write_tokens: 0, output_tokens: 7.7e3, cost_usd: 0.18, calls: 12, sessions: 8, is_estimate: 1, cost_confidence: 'estimate' },
+      ],
+      cache: { breaks: 172, tokens: 13.4e6, causes: { model_switch: 18, system_prompt_change: 39, tools_changed: 3, eviction: 112 }, tokenCauses: { model_switch: 1.38e6, system_prompt_change: 3.14e6, tools_changed: 177900, eviction: 8.74e6 } },
+      latest: {
+        session: SESSIONS[0],
+        models: [
+          { model: 'claude-sonnet-4.6', calls: 170, fresh: 1.3e6, cached: 17.4e6, output: 8.8e4, cost_usd: 30.1 },
+          { model: 'gpt-5.4', calls: 5, fresh: 9.4e4, cached: 5.2e5, output: 3.1e3, cost_usd: 0 },
+        ],
+      },
+      budget: { day: { usd: 34.2, limit: 50 }, week: { usd: 86.9, limit: 75 } },
+      models: MODELS,
+      daily: DAILY,
+      settings: { showEstimatedCost: true },
+      workspaceFolders: ['c:/Users/TatsatPandey/Downloads/ai-cost-tracker'],
+    };
+
+    const SESSION_MODELS = { 'cp:37cb5475-cb53-4b85-b70d-45cbec1520a4': DASH.latest.models.map((m) => Object.assign({ cache_write: 0 }, m)) };
+
+    window.acquireVsCodeApi = function () {
+      let state = {};
+      return {
+        getState: () => state,
+        setState: (s) => { state = s; },
+        postMessage: (msg) => {
+          if (!msg || msg.type !== 'rpc:request') return;
+          const respond = (result) => window.postMessage({ type: 'rpc:response', id: msg.id, result }, '*');
+          switch (msg.method) {
+            case 'getDashboard': return respond(DASH);
+            case 'getSessions': return respond(SESSIONS);
+            case 'getSessionModels': return respond(SESSION_MODELS[msg.params.sessionId] || MODELS.slice(0, 2).map((m) => Object.assign({}, m)));
+            default: return respond(null);
+          }
+        },
+      };
+    };
+  </script>
+</head>
+<body>
+  <header class="topbar">
+    <h1>TokenLens</h1>
+    <div class="controls">
+      <select id="windowSel" class="sel" title="Time window">
+        <option value="0">All time</option>
+        <option value="6">Last 6h</option>
+        <option value="12">Last 12h</option>
+        <option value="24">Last 24h</option>
+        <option value="48">Last 48h</option>
+        <option value="72">Last 72h</option>
+        <option value="168">Last 7 days</option>
+        <option value="custom">Custom…</option>
+      </select>
+      <span id="customRange" class="custom-range hidden">
+        <input type="date" id="fromDate" class="sel" />
+        <span class="muted">→</span>
+        <input type="date" id="toDate" class="sel" />
+      </span>
+      <div class="seg" id="sourceFilter">
+        <button data-src="" class="active">All</button>
+        <button data-src="claudeCode">Claude Code</button>
+        <button data-src="copilot">Copilot</button>
+        <button data-src="geminiCli">Gemini CLI</button>
+      </div>
+      <button id="syncBtn" class="btn">Sync</button>
+      <button id="exportCsvBtn" class="btn">Export CSV</button>
+      <button id="exportJsonBtn" class="btn">Export JSON</button>
+    </div>
+  </header>
+
+  <div id="status" class="status hidden"></div>
+
+  <section class="cards" id="cards"></section>
+
+  <section class="panel" id="deepDive">
+    <h2>Token deep dive</h2>
+    <div class="tokbar" id="tokBar"></div>
+    <div class="tok-legend" id="tokLegend"></div>
+    <div class="hit-row" id="hitRow"></div>
+    <div class="ministats" id="tokStats"></div>
+    <div class="cause-row" id="causeRow"></div>
+  </section>
+
+  <section class="panel latest hidden" id="latestPanel">
+    <h2>Latest session</h2>
+    <div id="latestBody"></div>
+  </section>
+
+  <section id="budgetSection" class="budget hidden">
+    <div class="budget-row" id="budgetDay"></div>
+    <div class="budget-row" id="budgetWeek"></div>
+  </section>
+
+  <section class="panel">
+    <h2>Daily usage</h2>
+    <canvas id="chart" height="160"></canvas>
+    <div class="legend">
+      <span><i class="dot cc"></i> Claude Code</span>
+      <span><i class="dot cp"></i> Copilot</span>
+      <span><i class="dot gm"></i> Gemini CLI</span>
+      <span class="muted">bars = tokens/day, line = cost/day</span>
+    </div>
+  </section>
+
+  <section class="panel">
+    <h2>By model</h2>
+    <table id="modelsTable"><thead><tr>
+      <th>Source</th><th>Model</th><th class="num">Calls</th>
+      <th class="num">Fresh in</th><th class="num">Cached</th><th class="num">Cache wr</th><th class="num">Output</th>
+      <th class="num">Cache&nbsp;hit</th><th class="num">Cost</th>
+    </tr></thead><tbody></tbody></table>
+  </section>
+
+  <section class="panel">
+    <h2>Sessions <span class="muted" style="font-weight:400;text-transform:none;letter-spacing:0">— click a row for per-model detail</span></h2>
+    <input id="search" class="search" type="text" placeholder="Filter by title or workspace…" />
+    <table id="sessionsTable"><thead><tr>
+      <th data-sort="source">Source</th>
+      <th data-sort="title">Title</th>
+      <th data-sort="workspace">Workspace</th>
+      <th data-sort="tokens" class="num">Tokens</th>
+      <th data-sort="cache" class="num">Cache&nbsp;hit</th>
+      <th data-sort="cost_usd" class="num">Cost</th>
+      <th data-sort="when">When</th>
+    </tr></thead><tbody></tbody></table>
+  </section>
+
+  <footer class="foot">
+    <span class="foot-item"><span class="key">$X</span> billed (Copilot credits)</span>
+    <span class="foot-item"><span class="key">≈ est</span> Claude Code / Gemini CLI estimate</span>
+    <span class="foot-item"><span class="key">≥</span> floor (partial credit data)</span>
+    <span class="foot-item"><span class="key">—</span> no reliable cost → tokens shown</span>
+    <span class="foot-item muted">All data read locally · nothing leaves your machine</span>
+  </footer>
+
+  <script src="../../src/ui/app.js"></script>
+</body>
+</html>

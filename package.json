@@ -1,0 +1,168 @@
+{
+  "name": "tokenlens",
+  "displayName": "TokenLens — AI Usage & Cost",
+  "description": "100% local token usage, cache analytics, and cost confidence for Claude Code, GitHub Copilot, and Gemini CLI. No cloud, no telemetry — your logs never leave your machine.",
+  "version": "0.7.2",
+  "publisher": "TatsatP",
+  "license": "MIT",
+  "icon": "media/icon.png",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tatsat3mutee/tokenlens.git"
+  },
+  "bugs": {
+    "url": "https://github.com/tatsat3mutee/tokenlens/issues"
+  },
+  "homepage": "https://github.com/tatsat3mutee/tokenlens#readme",
+  "qna": "https://github.com/tatsat3mutee/tokenlens/issues",
+  "extensionKind": [
+    "ui",
+    "workspace"
+  ],
+  "galleryBanner": {
+    "color": "#0d1117",
+    "theme": "dark"
+  },
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Other",
+    "Visualization",
+    "Machine Learning"
+  ],
+  "keywords": [
+    "claude",
+    "claude code",
+    "copilot",
+    "gemini",
+    "gemini cli",
+    "tokens",
+    "cost",
+    "usage",
+    "ai",
+    "local-first"
+  ],
+  "main": "./src/extension.js",
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "contributes": {
+    "commands": [
+      {
+        "command": "tokenLens.openPanel",
+        "title": "TokenLens: Open Dashboard",
+        "icon": "$(graph)"
+      },
+      {
+        "command": "tokenLens.refresh",
+        "title": "TokenLens: Sync Now",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "tokenLens.export",
+        "title": "TokenLens: Export Report (CSV/JSON)"
+      }
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "tokenLens",
+          "title": "TokenLens",
+          "icon": "media/sidebar.svg"
+        }
+      ]
+    },
+    "views": {
+      "tokenLens": [
+        {
+          "id": "tokenLensPanel",
+          "name": "Dashboard",
+          "type": "webview"
+        }
+      ]
+    },
+    "viewsWelcome": [
+      {
+        "view": "tokenLensPanel",
+        "contents": "Open the local TokenLens dashboard for Claude Code, Copilot, and Gemini CLI usage.\n\n[$(graph) Open Dashboard](command:tokenLens.openPanel)"
+      }
+    ],
+    "configuration": {
+      "title": "TokenLens",
+      "properties": {
+        "tokenLens.sources": {
+          "type": "array",
+          "items": { "type": "string", "enum": ["claudeCode", "copilot", "geminiCli"] },
+          "default": ["claudeCode", "copilot", "geminiCli"],
+          "description": "Which AI tools to track."
+        },
+        "tokenLens.autoSyncOnStartup": {
+          "type": "boolean",
+          "default": true,
+          "description": "Scan and sync logs when VS Code starts."
+        },
+        "tokenLens.liveTracking": {
+          "type": "boolean",
+          "default": true,
+          "description": "Watch log files and update the dashboard in near-real-time as you work."
+        },
+        "tokenLens.claudeCodeHome": {
+          "type": "string",
+          "default": "",
+          "description": "Override path to the Claude Code home directory (defaults to ~/.claude, or $CLAUDE_CONFIG_DIR)."
+        },
+        "tokenLens.geminiCliHome": {
+          "type": "string",
+          "default": "",
+          "description": "Override path to the Gemini CLI home directory (defaults to ~/.gemini, or $GEMINI_CLI_HOME)."
+        },
+        "tokenLens.cacheWriteTtl": {
+          "type": "string",
+          "enum": ["5m", "1h"],
+          "default": "5m",
+          "description": "Cache-write pricing tier for Claude Code USD estimates (5m = 1.25x input, 1h = 2x input)."
+        },
+        "tokenLens.showEstimatedCost": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show API-equivalent cost estimates for Claude Code and Gemini CLI. When off, those sources show tokens only (no USD), since you may pay a flat subscription (or nothing on free tiers) rather than per token."
+        },
+        "tokenLens.budget.dailyUSD": {
+          "type": "number",
+          "default": 0,
+          "description": "Daily spend threshold in USD (combined, including Claude Code estimate). 0 disables the alert."
+        },
+        "tokenLens.budget.weeklyUSD": {
+          "type": "number",
+          "default": 0,
+          "description": "Weekly spend threshold in USD. 0 disables the alert."
+        },
+        "tokenLens.debugLogging": {
+          "type": "boolean",
+          "default": false,
+          "description": "Verbose logging to the TokenLens output channel."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "lint": "eslint src/",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "make:icon": "node scripts/make-icon.js",
+    "build:vsix": "npx @vscode/vsce package --out dist/",
+    "install:vscode": "code --install-extension dist/tokenlens-*.vsix --force",
+    "dev:vscode": "npm run build:vsix && npm run install:vscode"
+  },
+  "dependencies": {
+    "sql.js": "^1.13.0"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.85.0",
+    "@vscode/vsce": "^3.0.0",
+    "eslint": "^8.57.0",
+    "sharp": "^0.33.5",
+    "vitest": "^2.1.0"
+  }
+}

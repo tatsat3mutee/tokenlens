@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="Content-Security-Policy"
+        content="default-src 'none'; style-src {{cspSource}} 'unsafe-inline'; script-src {{cspSource}}; img-src {{cspSource}} data:;" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="{{css}}" />
+  <title>TokenLens</title>
+</head>
+<body>
+  <header class="topbar">
+    <h1>TokenLens</h1>
+    <div class="controls">
+      <select id="windowSel" class="sel" title="Time window">
+        <option value="0">All time</option>
+        <option value="6">Last 6h</option>
+        <option value="12">Last 12h</option>
+        <option value="24">Last 24h</option>
+        <option value="48">Last 48h</option>
+        <option value="72">Last 72h</option>
+        <option value="168">Last 7 days</option>
+        <option value="custom">Custom…</option>
+      </select>
+      <span id="customRange" class="custom-range hidden">
+        <input type="date" id="fromDate" class="sel" />
+        <span class="muted">→</span>
+        <input type="date" id="toDate" class="sel" />
+      </span>
+      <div class="seg" id="sourceFilter">
+        <button data-src="" class="active">All</button>
+        <button data-src="claudeCode">Claude Code</button>
+        <button data-src="copilot">Copilot</button>
+        <button data-src="geminiCli">Gemini CLI</button>
+      </div>
+      <button id="syncBtn" class="btn">Sync</button>
+      <button id="exportCsvBtn" class="btn">Export CSV</button>
+      <button id="exportJsonBtn" class="btn">Export JSON</button>
+    </div>
+  </header>
+
+  <div id="status" class="status hidden"></div>
+
+  <section class="cards" id="cards"></section>
+
+  <section class="panel" id="deepDive">
+    <h2>Token deep dive</h2>
+    <div class="tokbar" id="tokBar"></div>
+    <div class="tok-legend" id="tokLegend"></div>
+    <div class="hit-row" id="hitRow"></div>
+    <div class="ministats" id="tokStats"></div>
+    <div class="cause-row" id="causeRow"></div>
+  </section>
+
+  <section class="panel latest hidden" id="latestPanel">
+    <h2>Latest session</h2>
+    <div id="latestBody"></div>
+  </section>
+
+  <section id="budgetSection" class="budget hidden">
+    <div class="budget-row" id="budgetDay"></div>
+    <div class="budget-row" id="budgetWeek"></div>
+  </section>
+
+  <section class="panel">
+    <h2>Daily usage</h2>
+    <canvas id="chart" height="160"></canvas>
+    <div class="legend">
+      <span><i class="dot cc"></i> Claude Code</span>
+      <span><i class="dot cp"></i> Copilot</span>
+      <span><i class="dot gm"></i> Gemini CLI</span>
+      <span class="muted">bars = tokens/day, line = cost/day</span>
+    </div>
+  </section>
+
+  <section class="panel">
+    <h2>By model</h2>
+    <table id="modelsTable"><thead><tr>
+      <th>Source</th><th>Model</th><th class="num">Calls</th>
+      <th class="num">Fresh in</th><th class="num">Cached</th><th class="num">Cache wr</th><th class="num">Output</th>
+      <th class="num">Cache&nbsp;hit</th><th class="num">Cost</th>
+    </tr></thead><tbody></tbody></table>
+  </section>
+
+  <section class="panel">
+    <h2>Sessions <span class="muted" style="font-weight:400;text-transform:none;letter-spacing:0">— click a row for per-model detail</span></h2>
+    <input id="search" class="search" type="text" placeholder="Filter by title or workspace…" />
+    <table id="sessionsTable"><thead><tr>
+      <th data-sort="source">Source</th>
+      <th data-sort="title">Title</th>
+      <th data-sort="workspace">Workspace</th>
+      <th data-sort="tokens" class="num">Tokens</th>
+      <th data-sort="cache" class="num">Cache&nbsp;hit</th>
+      <th data-sort="cost_usd" class="num">Cost</th>
+      <th data-sort="when">When</th>
+    </tr></thead><tbody></tbody></table>
+  </section>
+
+  <footer class="foot">
+    <span class="foot-item"><span class="key">$X</span> billed (Copilot credits)</span>
+    <span class="foot-item"><span class="key">≈ est</span> Claude Code / Gemini CLI estimate</span>
+    <span class="foot-item"><span class="key">≥</span> floor (partial credit data)</span>
+    <span class="foot-item"><span class="key">—</span> no reliable cost → tokens shown</span>
+    <span class="foot-item muted">All data read locally · nothing leaves your machine</span>
+  </footer>
+
+  <script src="{{js}}"></script>
+</body>
+</html>

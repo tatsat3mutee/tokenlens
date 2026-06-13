@@ -1,0 +1,9 @@
+{
+  "_comment": "Anthropic public list prices, USD per 1M tokens. input/output are base; cache_read = 0.1x input, cache_write_5m = 1.25x input, cache_write_1h = 2x input (applied in cost.js). Matched by family substring in pricing.js. Update from https://platform.claude.com/docs/en/pricing when prices change.",
+  "families": {
+    "fable": { "input": 10, "output": 50 },
+    "opus": { "input": 5, "output": 25 },
+    "sonnet": { "input": 3, "output": 15 },
+    "haiku": { "input": 1, "output": 5 }
+  }
+}

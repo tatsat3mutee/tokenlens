@@ -1,0 +1,7 @@
+{"sessionId":"abc-123-def","projectHash":"deadbeefcafe1234","startTime":"2026-01-10T09:00:00.000Z","lastUpdated":"2026-01-10T09:30:00.000Z"}
+{"id":"m1","timestamp":"2026-01-10T09:00:05.000Z","type":"user","content":"help me write a parser for session files"}
+{"id":"m2","timestamp":"2026-01-10T09:00:12.000Z","type":"gemini","content":"Sure!","model":"gemini-2.5-pro","tokens":{"input":1000,"output":200,"cached":600,"thoughts":50,"tool":30,"total":1280}}
+{"id":"m3","timestamp":"2026-01-10T09:05:00.000Z","type":"info","content":"model switched"}
+{"id":"m4","timestamp":"2026-01-10T09:10:00.000Z","type":"user","content":"now add tests"}
+{"id":"m5","timestamp":"2026-01-10T09:10:30.000Z","type":"gemini","content":"Done.","model":"gemini-2.5-flash","tokens":{"input":500,"output":100,"cached":0,"thoughts":0,"tool":0,"total":600}}
+{"id":"m6","timestamp":"2026-01-10T09:12:00.000Z","type":"gemini","content":"no tokens recorded here"}

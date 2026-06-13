@@ -1,0 +1,11 @@
+.vscode/**
+.sdlc/**
+tests/**
+**/*.test.js
+vitest.config.js
+.eslintrc.json
+.gitignore
+dist/**
+coverage/**
+scripts/**
+**/.DS_Store

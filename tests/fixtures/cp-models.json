@@ -1,0 +1,11 @@
+[
+  {
+    "id": "claude-sonnet-4.6",
+    "name": "Claude Sonnet 4.6",
+    "billing": {
+      "token_prices": {
+        "default": { "input_price": 30000, "output_price": 150000, "cache_price": 3000 }
+      }
+    }
+  }
+]
