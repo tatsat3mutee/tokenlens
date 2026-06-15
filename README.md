@@ -4,6 +4,12 @@
 
 A VS Code extension that tracks **token usage for Claude Code, GitHub Copilot, and Gemini CLI** in one place. TokenLens is token-first, with cost shown only when the data is reliable. It includes a unified dashboard, time-window filtering, token/cache deep dives, cache-break impact, budgets, live updates, and CSV/JSON export.
 
+![TokenLens dashboard - unified token, cache, and cost analytics for Claude Code, GitHub Copilot, and Gemini CLI](https://raw.githubusercontent.com/tatsat3mutee/tokenlens/main/media/dashboard-dark.png)
+
+<sub>The TokenLens panel: per-source cards, token & cache deep dive, latest session, budgets, daily usage chart, and a by-model breakdown. It also follows your VS Code light theme:</sub>
+
+![TokenLens dashboard in a light VS Code theme](https://raw.githubusercontent.com/tatsat3mutee/tokenlens/main/media/dashboard-light.png)
+
 ## 100% local - no cloud, no telemetry
 
 **Your data never leaves your machine.** TokenLens reads the log files your AI tools already write to disk, computes everything **locally**, and stores results in a local SQLite file inside VS Code's own storage. There are **no servers, no accounts, no outbound network calls, and no telemetry**. Source logs are opened **read-only** and are never modified.
